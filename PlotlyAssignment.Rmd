@@ -1,0 +1,52 @@
+---
+title: "Developing Data Products - Week3 Assignment"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## <u><b> Objective </u></b> 
+### <u><b> The objectives of this document are: </u></b> 
+ - Use "quakes" dataset and create a Plot using Plotly package
+ - Create an R Markdown presentation embedding the plot
+ - Host the R Markdown presentation on GitHub Pages
+
+## <u><b> Loading "quakes" Dataset </u></b> 
+ - Lets load the R built in "quakes" dataset
+ 
+```{r load_dataset}
+ library(plotly)
+ library(dplyr)
+ data("quakes")
+```
+
+## <u><b> Adding Severities based on Magnitude </u></b> 
+ - Lets assign some Severities (add a new column) as per the below guidelines. 
+ - This would help later in plotting this
+    * (4.0 ~ 4.9) -> low
+    * (5.0 ~ 5.9) -> intermediate
+    * (6.0 ~ 6.9) -> high
+
+```{r add_color}
+   quakes <- quakes %>% mutate (
+     sev = case_when(
+         mag >= 4.0 & mag <= 4.9 ~ "low",
+         mag >= 5.0 & mag <= 5.9 ~ "intermediate",
+         mag >= 6.0 & mag <= 6.9 ~ "high",
+     )
+   )
+```
+
+## <u><b> Scatter Plot </u></b>
+```{r plot}
+plot_ly(quakes, x = ~depth, y = ~mag, color = ~sev, type = "scatter")
+```
+
+## <u><b> Scatter Plot Observations </u></b>
+ - There are lot of obsevations of lower magnitudes (4.0 ~ 4.9) earth quakes compared to intermediate
+ - There are only 5 obvservations of higher magnitude (6.0 ~ 6.9) earth quakes
+ - From the above plot, it appears that the higher magnitude (6.0 ~ 6.9) earth quakes happens at lower depths
+ - Lower and Intermediate earth quakes appears to be equally distributed across all depths
